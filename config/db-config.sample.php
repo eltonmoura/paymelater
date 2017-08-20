@@ -1,6 +1,6 @@
 <?php
 // the connection configuration
-$dbConfig = [
+return [
     'driver'   => 'pdo_mysql',
     'user'     => '',
     'password' => '',

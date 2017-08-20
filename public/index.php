@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../bootstrap.php';
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use \App\Controllers\HomeController;
 use \App\Controllers\UserController;
 
 $appConfig = [
@@ -12,19 +11,29 @@ $appConfig = [
 ];
 $container = new \Slim\Container($appConfig);
 
+$container['entityManager'] = $entityManager;
+
 $app = new \Slim\App($container);
 
 // Routes -----------------------------------------------------------
 
-$app->get('/', function () {
-    print 'Nenhuma rota definida';
-});
+// Home
 
-$app->get('/hello/{name}', function (Request $request, Response $response) {
-    global $entityManager;
-    $userController = new UserController($entityManager);
-    $userController->sayHello($request, $response);
-});
+$app->get('/', HomeController::class . ':home');
+
+$app->get('/hello/{name}', HomeController::class . ':sayHello');
+
+// User
+
+$app->get('/user', UserController::class . ':listAction');
+
+$app->post('/user', UserController::class . ':addAction');
+
+$app->get('/user/{id}', UserController::class . ':findAction');
+
+$app->put('/user/{id}', UserController::class . ':editAction');
+
+$app->delete('/user/{id}', UserController::class . ':deleteAction');
 
 // ------------------------------------------------------------------
 

@@ -1,10 +1,14 @@
 <?php
 namespace App\Entities;
 
+use \App\Entity;
+use \JsonSerializable;
+use \DateTime;
+
 /**
  * @Entity @Table(name="users")
  **/
-class User
+class User extends Entity implements JsonSerializable
 {
     /**
      * @Id @Column(name="id", type="bigint", nullable=false) @GeneratedValue
@@ -283,6 +287,9 @@ class User
      */
     public function setCreatedAt($createdAt)
     {
+        if (!is_null($createdAt) && !is_a($createdAt, 'DateTime')) {
+            $createdAt = new DateTime($createdAt);
+        }
         $this->createdAt = $createdAt;
 
         return $this;
@@ -307,6 +314,9 @@ class User
      */
     public function setUpdatedAt($updatedAt)
     {
+        if (!is_null($updatedAt) && !is_a($updatedAt, 'DateTime')) {
+            $updatedAt = new DateTime($updatedAt);
+        }
         $this->updatedAt = $updatedAt;
 
         return $this;
